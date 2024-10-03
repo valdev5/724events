@@ -7,24 +7,33 @@ import "./style.scss";
 const Slider = () => {
   const { data } = useData();
   const [index, setIndex] = useState(0);
-  const byDateDesc = data?.focus.sort((evtA, evtB) =>
-    new Date(evtA.date) < new Date(evtB.date) ? -1 : 1
-  );
-  const nextCard = () => {
-    setTimeout(
-      () => setIndex(index < byDateDesc.length ? index + 1 : 0),
-      5000
-    );
-  };
-  useEffect(() => {
-    nextCard();
+
+  // Filtrer les événements entre janvier (0) et mai (4)
+  const filteredData = data?.focus.filter((event) => {
+    const eventMonth = new Date(event.date).getMonth();
+    return eventMonth >= 0 && eventMonth <= 4; // Entre janvier et mai
   });
+
+  // Trier par ordre croissant de date
+  const byDateAsc = filteredData?.sort((evtA, evtB) =>
+    new Date(evtA.date) > new Date(evtB.date) ? 1 : -1
+  );
+
+  const dataLength = byDateAsc?.length;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex(prevIndex => (prevIndex < dataLength - 1 ? prevIndex + 1 : 0));
+    }, 5000);
+
+    return () => clearInterval(interval); // Nettoyage de l'intervalle
+  }, [dataLength]);
+
   return (
     <div className="SlideCardList">
-      {byDateDesc?.map((event, idx) => (
-        <>
+      {byDateAsc?.map((event, idx) => (
+        <div key={event.id}> {/* Utilisation de event.id au lieu de idx */}
           <div
-            key={event.title}
             className={`SlideCard SlideCard--${
               index === idx ? "display" : "hide"
             }`}
@@ -40,17 +49,18 @@ const Slider = () => {
           </div>
           <div className="SlideCard__paginationContainer">
             <div className="SlideCard__pagination">
-              {byDateDesc.map((_, radioIdx) => (
+              {byDateAsc.map((_, radioIdx) => (
                 <input
-                  key={`${event.id}`}
+                  key={`radio-${event.id}`} /* Utilisation de event.id */
                   type="radio"
                   name="radio-button"
-                  checked={idx === radioIdx}
+                  checked={index === radioIdx}
+                  onChange={() => setIndex(radioIdx)} // Permet de changer manuellement le slide
                 />
               ))}
             </div>
           </div>
-        </>
+        </div>
       ))}
     </div>
   );
