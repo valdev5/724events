@@ -24,7 +24,6 @@ describe("When Form is created", () => {
       await screen.findByText("Envoyer", {}, { timeout: 3000 });
     });
   });
-
 });
 
 // Ajout de tests d'intégration
@@ -53,12 +52,7 @@ describe("When a page is created", () => {
   it("an event card, with the last event, is displayed", async () => {
     // test implementation
     render(<Home />);
-    setTimeout(() => {
-      () => {
-        const { last } = useData();
         screen.findByTestId("event-card");
-        screen.findByText(last.title);
-      };
-    }, 100);
+        screen.findByText("conférence #productCON");
   });
 });

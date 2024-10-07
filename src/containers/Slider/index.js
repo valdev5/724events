@@ -23,7 +23,7 @@ const Slider = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex(prevIndex => (prevIndex < dataLength - 1 ? prevIndex + 1 : 0));
+      setIndex((prevIndex) => (prevIndex < dataLength - 1 ? prevIndex + 1 : 0));
     }, 5000);
 
     return () => clearInterval(interval); // Nettoyage de l'intervalle
@@ -31,11 +31,11 @@ const Slider = () => {
 
   return (
     <div className="SlideCardList">
-      {byDateAsc?.map((event, idx) => (
-        <div key={event.id}> {/* Utilisation de event.id au lieu de idx */}
+      {byDateAsc?.map((event) => (
+        <div key={event.id || event.title}> {/* Utilisation de event.id ou event.title comme clé */}
           <div
             className={`SlideCard SlideCard--${
-              index === idx ? "display" : "hide"
+              index === byDateAsc.indexOf(event) ? "display" : "hide"
             }`}
           >
             <img src={event.cover} alt="forum" />
@@ -49,9 +49,9 @@ const Slider = () => {
           </div>
           <div className="SlideCard__paginationContainer">
             <div className="SlideCard__pagination">
-              {byDateAsc.map((_, radioIdx) => (
+              {byDateAsc?.map((_, radioIdx) => (
                 <input
-                  key={`radio-${event.id}`} /* Utilisation de event.id */
+                  key={`radio-${_.id || _.title}`} /* Utilisation de event.id ou event.title pour la clé */
                   type="radio"
                   name="radio-button"
                   checked={index === radioIdx}

@@ -24,7 +24,7 @@ describe("When Events is created", () => {
       );
       // Correction pour laisser un laps de temps avant de trouver les élements
       await screen.findByText("En cours", {}, { timeout: 3000 });
-      await screen.findByText("Envoyer",  {}, { timeout: 3000 });
+      await screen.findByText("Envoyer", {}, { timeout: 3000 });
       expect(onSuccess).toHaveBeenCalled();
     });
   });
