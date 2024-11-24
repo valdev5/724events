@@ -28,6 +28,7 @@ describe("When Modal data is created", () => {
           bubbles: true,
         })
       );
+
     });
   });
 
